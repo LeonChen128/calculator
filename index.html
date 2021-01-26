@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link href="./icon/css/all.css" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0px;
+    }
+    #calculator {
+      width: 350px;
+      height: 450px;
+      border: 4px solid gray;
+      margin: 30px auto;
+      border-radius: 4px;
+      padding: 15px 15px;
+      box-shadow: 3px 3px 8px gray;
+      position: relative;
+      background: #f5dcf0;
+    }
+    .hr {
+      position: absolute;
+      top: 102px;
+      width: 90%;
+      left: 17px;
+    }
+    #monitor-frame {
+      width: 100%;
+      height: 60px;
+      line-height: 60px;
+      border: 2px solid gray;
+      border-radius: 4px;
+      text-align: right;
+      background: #eeeded;
+      position: relative;
+    }
+    #monitor {
+      margin: 0px;
+      font-size: 30px;
+      position: relative;
+      right: 5px;
+      bottom: 1px;
+      font-family: sans-serif;
+    }
+    #smallMonitor {
+      width: 175px;
+      height: 24px;
+      border: 1px solid red;
+      position: relative;
+      top: 5px;
+      float: right;
+      font-family: sans-serif;
+      border: 2px solid gray;
+      border-radius: 4px;
+      background: #eeeded;
+      text-align: right;
+      padding-right: 5px;
+      font-size: 14px;
+    }
+    .button-frame {
+      width: 100%;
+      margin: 40px auto;
+    }
+    .button-frame > div {
+      float: left;
+      width: 25%;
+      position: relative;
+    }
+    .button-frame > div > p {
+      text-align: center;
+      width: 60px;
+      height: 50px;
+      line-height: 45px;
+      border-radius: 4px;
+      font-size: 22px;
+      margin: 10px auto;
+      border: 3px solid black;
+      background: gray;
+      color: white;
+      cursor: pointer;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <div id="calculator">
+    <div id="monitor-frame">
+      <p id="monitor">0</p>
+    </div>
+
+    <div id="smallMonitor"></div>
+
+    <hr class="hr">
+
+    <div class="button-frame">
+      <div style="right: 8px;">
+        <p id="btnC">C</p>
+        <p id="btn7">7</p>
+        <p id="btn4">4</p>
+        <p id="btn1">1</p>
+        <p id="btn0">0</p>
+      </div>
+
+      <div style="right: 4px;">
+        <p id="btnPercent">%</p>
+        <p id="btn8">8</p>
+        <p id="btn5">5</p>
+        <p id="btn2">2</p>
+        <p id="btn00">00</p>
+      </div>
+
+      <div style="left: 4px;">
+        <p id="btnDel">DEL</p>
+        <p id="btn9">9</p>
+        <p id="btn6">6</p>
+        <p id="btn3">3</p>
+        <p id="btnDot">.</p>
+      </div>
+
+      <div style="left: 8px;">
+        <p id="btnDivide"><i class="fas fa-divide"></i></p>
+        <p id="btnCross"><i class="fas fa-times"></i></p>
+        <p id="btnMinus"><i class="fas fa-minus"></i></p>
+        <p id="btnAdd"><i class="fas fa-plus"></i></p>
+        <p id="btnEqual"><i class="fas fa-equals"></i></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  
+  
+  <script>
+    const $monitor = $('#monitor'),
+    $smallMonitor = $('#smallMonitor'),
+    $btnC = $('#btnC'),
+    $btn7 = $('#btn7'),
+    $btn4 = $('#btn4'),
+    $btn1 = $('#btn1'),
+    $btn0 = $('#btn0'),
+    $btnPercent = $('#btnPercent'),
+    $btn8 = $('#btn8'),
+    $btn5 = $('#btn5'),
+    $btn2 = $('#btn2'),
+    $btn00 = $('#btn00'),
+    $btnDel = $('#btnDel'),
+    $btn9 = $('#btn9'),
+    $btn6 = $('#btn6'),
+    $btn3 = $('#btn3'),
+    $btnDot = $('#btnDot'),
+    $btnDivide = $('#btnDivide'),
+    $btnCross = $('#btnCross'),
+    $btnMinus = $('#btnMinus'),
+    $btnAdd = $('#btnAdd'),
+    $btnEqual = $('#btnEqual'),
+    symbolDivide = '<i class="fas fa-divide"></i>',
+    symbolCross = '<i class="fas fa-times"></i>',
+    symbolMinus = '<i class="fas fa-minus"></i>',
+    symbolAdd = '<i class="fas fa-plus"></i>',
+    symbolEqual = '<i class="fas fa-equals"></i>'
+
+    let unit = [],
+      answer = 0,
+      calculateOn = false
+
+    function init() {
+      unit = []
+    }
+
+    function inputNumber(n) {
+      if ($monitor.html() == 0 || calculateOn === true) {
+        $monitor.html(n)
+        calculateOn = false
+        return true
+      }
+      $monitor.append(n)
+    }
+
+    function calculate(icon, symbol) {
+      $smallMonitor.html(icon)
+      calculateOn = true
+      unit.push($monitor.html())
+      unit.push(symbol)
+      console.log(unit)
+    }
+
+    $btnC.click(function() {
+      $monitor.html(0)
+      $smallMonitor.html('')
+      unit = []
+      calculateOn = false
+    })
+
+    $btn9.click(_ => inputNumber(9))
+    $btn8.click(_ => inputNumber(8))
+    $btn7.click(_ => inputNumber(7))
+    $btn6.click(_ => inputNumber(6))
+    $btn5.click(_ => inputNumber(5))
+    $btn4.click(_ => inputNumber(4))
+    $btn3.click(_ => inputNumber(3))
+    $btn2.click(_ => inputNumber(2))
+    $btn1.click(_ => inputNumber(1))
+    $btn0.click(_ => inputNumber(0))
+    $btn00.click(_ => {
+      inputNumber(0)
+      inputNumber(0)
+    })
+
+    $btnDivide.click(_ => calculate(symbolDivide, '/'))
+    $btnCross.click(_ => calculate(symbolCross, '*'))
+    $btnMinus.click(_ => calculate(symbolMinus, '-'))
+    $btnAdd.click(_ => calculate(symbolAdd, '+'))
+
+    $btnEqual.click(_ => {
+      if (unit.length < 1) { return }
+
+      if (unit[1] == '/') { answer =  Number(unit[0]) / Number($monitor.html()) }
+      if (unit[1] == '*') { answer =  Number(unit[0]) * Number($monitor.html()) }
+      if (unit[1] == '-') { answer =  Number(unit[0]) - Number($monitor.html()) }
+      if (unit[1] == '+') { answer =  Number(unit[0]) + Number($monitor.html()) }       
+
+      $smallMonitor.html(unit[0] + unit[1] + $monitor.html())  
+      $monitor.html(answer)
+      init()
+    })
+
+    
+  </script>
+</body>
+</html>
