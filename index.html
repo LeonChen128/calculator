@@ -176,7 +176,8 @@
       calculateOn = false,
       dotOn = false,
       indexCross,
-      indexDivide
+      indexDivide,
+      answer
 
     function initAll() {
       unit = []
@@ -248,8 +249,8 @@
       tempNumber = ''
       calculateAll = []
       unit.forEach(value => {
-        if ($.inArray(value, [0, 9, 8, 7, 6, 5, 4, 3, 2, 1, '.']) >= 0) {
-          tempNumber += value
+        if ($.inArray(value, [symbolAdd, symbolMinus, symbolCross, symbolDivide]) < 0) {
+          tempNumber += String(value)
         } else {
           calculateAll.push(tempNumber)
           calculateAll.push(value)
@@ -257,24 +258,22 @@
         }
       })
       if (tempNumber > 0) { calculateAll.push(tempNumber) }
-      console.log(calculateAll)
     }
 
     function fitCrossAndDivide() {
-      indexCross = $.inArray(symbolCross, calculateAll) // 3
-      indexDivide = $.inArray(symbolDivide, calculateAll) // 5
+      indexCross = $.inArray(symbolCross, calculateAll)
+      indexDivide = $.inArray(symbolDivide, calculateAll)
       if (indexCross > 0 && indexDivide > 0) {
         // 同時有乘號及除號
         if (indexCross < indexDivide) {
           // 乘號在前
-          if (calculateAll.length >= indexCross + 1) { // 9 > 3
+          if (calculateAll.length >= indexCross + 1) {
             // 已有尾數
             tempAnswer = calculateAll[indexCross - 1] * calculateAll[indexCross + 1]
             calculateAll.splice(indexCross - 1, 3)
             calculateAll.splice(indexCross - 1, 0, tempAnswer)
             indexCross = 0
             indexDivide = 0
-            console.log(calculateAll) // [2, +, 18, /, 6, +, 2]
             fitCrossAndDivide()
           }
         } else {
@@ -286,7 +285,6 @@
             calculateAll.splice(indexDivide - 1, 0, tempAnswer)
             indexCross = 0
             indexDivide = 0
-            console.log(calculateAll)
             fitCrossAndDivide()
           }
         }
@@ -300,7 +298,6 @@
           calculateAll.splice(indexCross - 1, 0, tempAnswer)
           indexCross = 0
           indexDivide = 0
-          console.log(calculateAll)
           if ($.inArray(symbolCross, calculateAll) > 0) { fitCrossAndDivide() }
         }
       }
@@ -312,7 +309,6 @@
           calculateAll.splice(indexDivide - 1, 0, tempAnswer)
           indexCross = 0
           indexDivide = 0
-          console.log(calculateAll)
           if ($.inArray(symbolDivide, calculateAll) > 0) { fitCrossAndDivide() }
         }
       }
@@ -366,6 +362,15 @@
     $btnMinus.click(_ => inputBtn('-'))
     $btnAdd.click(_ => inputBtn('+'))
 
+    $btnPercent.click(_ => {
+      if (unit.length > 0) calculateAll[0] = unit[0]
+      if (calculateAll.length <= 0) return
+      $monitor.html(answer = calculateAll[0] / 100)
+      initAll()
+      unit.push(answer)
+      $smallMonitor.html('')
+    })
+
     $btnEqual.click(_ => {
       if (calculateAll.length < 3 || calculateAll.length % 2 == 0) {
         $smallMonitor.html('輸入有誤')
@@ -373,8 +378,9 @@
       }
       $smallMonitor.html('答案')
       fitCrossAndDivide()
-      $monitor.html(finalCalculate())
+      $monitor.html(answer = finalCalculate())
       initAll()
+      unit.push(answer)
     })
 
     
