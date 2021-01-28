@@ -188,8 +188,7 @@
       dotOn = false,
       indexCross,
       indexDivide,
-      answer,
-      symbolIndex
+      answer
 
     function initAll() {
       unit = []
@@ -202,7 +201,7 @@
 
     function inputBtn(n) {
       $smallMonitor.html('')
-      if (symbolIndex = $.inArray(n, ['/', '*', '-', '+']) >= 0) {
+      if ($.inArray(n, ['/', '*', '-', '+']) >= 0) {
         if (unit.length == 0) { unit.push(0) }
         if (calculateOn === true) {
           if (n === '+') { 
