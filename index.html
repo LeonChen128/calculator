@@ -12,6 +12,12 @@
     body {
       margin: 0px;
     }
+    h2 {
+      width: 220px;
+      margin: 10px auto;
+      text-align: center;
+      background: #e0abf1;
+    }
     #calculator {
       width: 350px;
       height: 450px;
@@ -86,11 +92,15 @@
       color: white;
       cursor: pointer;
     }
+    #btnEqual, #btnC {
+      background: #d83619;
+    }
     
   </style>
 </head>
 <body>
 
+  <h2><i class="fas fa-calculator"></i> 計算機機 <i class="fas fa-calculator"></i></h2>
   <div id="calculator">
     <div id="monitor-frame">
       <p id="monitor">0</p>
@@ -166,7 +176,8 @@
     symbolCross = '<i class="fas fa-times"></i>',
     symbolMinus = '<i class="fas fa-minus"></i>',
     symbolAdd = '<i class="fas fa-plus"></i>',
-    symbolEqual = '<i class="fas fa-equals"></i>'
+    symbolEqual = '<i class="fas fa-equals"></i>',
+    symbol = [symbolDivide, symbolCross, symbolMinus, symbolAdd]
 
     let unit = [],
       monitorShow = '',
@@ -177,7 +188,8 @@
       dotOn = false,
       indexCross,
       indexDivide,
-      answer
+      answer,
+      symbolIndex
 
     function initAll() {
       unit = []
@@ -190,7 +202,7 @@
 
     function inputBtn(n) {
       $smallMonitor.html('')
-      if ($.inArray(n, ['/', '*', '-', '+']) >= 0) {
+      if (symbolIndex = $.inArray(n, ['/', '*', '-', '+']) >= 0) {
         if (unit.length == 0) { unit.push(0) }
         if (calculateOn === true) {
           if (n === '+') { 
@@ -215,6 +227,7 @@
           if (n === '*') { unit.push(symbolCross) }
           if (n === '/') { unit.push(symbolDivide) }
         }
+        $smallMonitor.html('你按了' + symbol[$.inArray(n, ['/', '*', '-', '+'])])
         dotOn = false
       }
 
@@ -226,8 +239,10 @@
         }
         unit.push(n)
         if (n == '.') { dotOn = true }
+        $smallMonitor.html('你按了' + n)
       }
       showMonitor()
+      
     }
 
     function showMonitor() {
@@ -338,8 +353,10 @@
     })
 
     $btnDel.click(_ => {
+      if (unit.length === 0) return
       unit.pop()
       showMonitor()
+      $smallMonitor.html('你按了 DEL')
     })
 
     $btn9.click(_ => inputBtn(9))
@@ -356,6 +373,7 @@
     $btn00.click(_ => {
       inputBtn(0)
       inputBtn(0)
+      $smallMonitor.html('你按了00')
     })
     $btnDivide.click(_ => inputBtn('/'))
     $btnCross.click(_ => inputBtn('*'))
@@ -363,12 +381,12 @@
     $btnAdd.click(_ => inputBtn('+'))
 
     $btnPercent.click(_ => {
-      if (unit.length > 0) calculateAll[0] = unit[0]
-      if (calculateAll.length <= 0) return
+      if (unit.length === 0) return
+      if (calculateAll.length === 0 && unit.length === 1) calculateAll[0] = unit[0]
       $monitor.html(answer = calculateAll[0] / 100)
       initAll()
       unit.push(answer)
-      $smallMonitor.html('')
+      $smallMonitor.html('你按了%')
     })
 
     $btnEqual.click(_ => {
